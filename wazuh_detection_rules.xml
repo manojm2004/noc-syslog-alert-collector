@@ -1,0 +1,36 @@
+<!-- Wazuh SIEM & Syslog Custom Detection Rules -->
+<!-- Author: Manoj M | Network & Cyber Security Engineer -->
+<!-- Alignment: Networkers Home Roadmap - AI-SOC & SIEM Path -->
+
+<group name="syslog,security_alerts,">
+  <!-- Rule 1: SSH Brute Force Detection -->
+  <rule id="100100" level="10">
+    <if_matched_sid>5710</if_matched_sid>
+    <same_source_ip />
+    <frequency>5</frequency>
+    <timeframe>60</timeframe>
+    <description>SOC Alert: Potential SSH Brute-Force Attack detected (5 failed attempts within 60s)</description>
+    <mitre>
+      <id>T1110.001</id>
+    </mitre>
+  </rule>
+
+  <!-- Rule 2: Unauthorized Sudo Privilege Escalation -->
+  <rule id="100101" level="12">
+    <if_sid>5402</if_sid>
+    <match>COMMAND=/bin/bash|COMMAND=/bin/sh</match>
+    <description>SOC Critical: Root shell spawned via sudo by non-admin user</description>
+    <mitre>
+      <id>T1548.003</id>
+    </mitre>
+  </rule>
+
+  <!-- Rule 3: Palo Alto Threat Log Alert: Command and Control Traffic -->
+  <rule id="100102" level="14">
+    <match>THREAT|command-and-control</match>
+    <description>SOC Critical: Palo Alto NGFW detected Command-and-Control (C2) beaconing</description>
+    <mitre>
+      <id>T1071</id>
+    </mitre>
+  </rule>
+</group>
